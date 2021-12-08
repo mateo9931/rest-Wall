@@ -46,7 +46,7 @@ public class PublicPostController {
         return ResponseEntity.ok(postList);
     }
     @PostMapping("addpost/{email}")
-    public ResponseEntity<?> addPost(@RequestBody PostDto post,@PathVariable String email) throws NullPointerException {
+    public ResponseEntity<?> addPost(PostDto post,@PathVariable String email) throws NullPointerException {
     	UserDto userDto = new UserDto();
     	userDto.setEmail(email);
         Post savedPost = postService.savePost(userDto,post.getContent());
