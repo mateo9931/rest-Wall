@@ -1,6 +1,7 @@
 package edu.eci.arsw.restwall.controller;
 
-import edu.eci.arsw.restwall.dtos.PostDto;
+import edu.eci.arsw.restwall.auth.models.UserDto;
+import edu.eci.arsw.restwall.auth.models.*;
 import edu.eci.arsw.restwall.model.Post;
 import edu.eci.arsw.restwall.model.User;
 import edu.eci.arsw.restwall.service.PostService;
@@ -13,7 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("public")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH,
+		RequestMethod.DELETE }, allowedHeaders = "*")
 public class PublicPostController {
 
     @Autowired
@@ -43,5 +45,13 @@ public class PublicPostController {
         List<PostDto> postList = postService.getPostsOfUser(userId);
         return ResponseEntity.ok(postList);
     }
+    @PostMapping("addpost/{email}")
+    public ResponseEntity<?> addPost(@RequestBody PostDto post,@PathVariable String email) throws NullPointerException {
+    	UserDto userDto = new UserDto();
+    	userDto.setEmail(email);
+        Post savedPost = postService.savePost(userDto,post.getContent());
+        return ResponseEntity.ok(savedPost);
+    }
+    
 
 }

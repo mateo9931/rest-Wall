@@ -1,17 +1,18 @@
 package edu.eci.arsw.restwall.service;
 
-import edu.eci.arsw.restwall.auth.SecurityService;
 import edu.eci.arsw.restwall.auth.models.UserDto;
-import edu.eci.arsw.restwall.dtos.PostDto;
+import edu.eci.arsw.restwall.auth.models.PostDto;
 import edu.eci.arsw.restwall.model.Post;
 import edu.eci.arsw.restwall.model.User;
 import edu.eci.arsw.restwall.repository.PostRepository;
 import edu.eci.arsw.restwall.repository.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,14 +27,14 @@ public class PostService {
     @Autowired
     ModelMapper modelMapper;
 
-    @Autowired
-    SecurityService securityService;
+
 
     public Post savePost(UserDto userDto, String content){
         Post post = new Post();
         User user = userRepository.findUserByEmail(userDto.getEmail());
         post.setUser(user);
         post.setContent(content);
+        post.setCreatedDate(new Date());
         return postRepository.save(post);
     }
 
@@ -47,6 +48,7 @@ public class PostService {
     }
 
     public List<Post> getAllPost(){
+        System.out.println(postRepository.findAllByOrderByIdDesc());
         return postRepository.findAllByOrderByIdDesc();
     }
 
